@@ -8,7 +8,16 @@ void DefaultWorkTest()
 	char* result_0 = A.alloc(0);
 	char* result_1= A.alloc(50);
 	char* result_2 = A.alloc(20);
-	assert(result_2-result_0 == 70); 
+	char* result_3 = A.alloc(0);
+	assert(result_3-result_0 == 70); 
+}
+
+void DefaultCreateTest()
+{
+	Allocator A;
+	A.makeAllocator(20);
+	assert(A.ret_start_mem() != nullptr && A.ret_current() == 0 && A.ret_msize() == 20 );
+
 }
 
 void CheckResetTest()
@@ -37,6 +46,7 @@ void UsingMemAfterReset()
 	char* result_1 = A.alloc(10);
 	A.reset();
 	char* result_2 = A.alloc(10);
+	//char* result_3 = A.alloc(0);
 	assert(result_1 == result_2);
 }
 
@@ -56,6 +66,7 @@ int main(){
 	OutOfBufferTest();
 	UsingMemAfterReset();
 	FullMemFill();
+	DefaultCreateTest();
 
 	std::cout << "success \n";
 

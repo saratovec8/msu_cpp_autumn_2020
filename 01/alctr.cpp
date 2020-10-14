@@ -1,41 +1,60 @@
 #include<iostream>
 class Allocator{
 	private:
-		char *mem;
+		char *start_mem;
 		size_t current;
 		size_t msize;
 	public:
+		Allocator()
+		{
+		start_mem = nullptr;
+		current = 0;
+		msize = 0;
+		}
+		~Allocator()
+		{
+			std::free(start_mem);
+		}
 		void makeAllocator(size_t maxSize)
 		{
-			char buffer[maxSize];
-			if (!buffer){
-				return;
+			
+			if(start_mem != nullptr){
+			start_mem = static_cast<char*>(std::realloc(start_mem,maxSize));
+			}else{
+			start_mem = static_cast<char*>(std::malloc(maxSize* sizeof(char)));
 			}
-			mem = buffer;
-			current = 0;
+
 			msize = maxSize;
+			current = 0;
 		}
 		char* alloc(size_t size)
 		{
-			if (size <0)
-				return nullptr;
-			//char *ptr = mem;
-			if (size == 0)
-				return mem;
-			if ( current + size < msize && size!=0){
-				mem += size;
-				current += size;
-				return mem;
-
-			}else{
-				return nullptr;
-			}  
+			if(current + size > msize){
+			return nullptr;
+			} else {
+			current += size;
+			return start_mem + current - size;
+			}
+			
 		}
 		void reset()
 		{
-			mem -= current;
 			current = 0;
 		}
+
+		size_t ret_current(){
+		return current;
+		}
+
+		size_t ret_msize(){
+		return msize;
+		}
+
+		char* ret_start_mem(){
+		return start_mem;
+		}
+                
+
 };
 
 
