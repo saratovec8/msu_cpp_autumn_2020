@@ -5,18 +5,19 @@
 #include "parser.h"
 #include <functional>
 
-void Parser::ParseLine( callBackStart cbst, callBackNum cbnm, callBackStr cbstr,callBackFinish cbfsh, std::ofstream &out)
+void Parser:: ParseLine(callBackStart call_back_start, callBackNum call_back_num, callBackStr call_back_str,
+		callBackFinish call_back_finish, std::ofstream &out)
 {
 	int len = line.length();
 	int current_pos = 0;
 	int i;
-	std:: string token = "";
+	std::string token = "";
 
-	cbst(out);
+	call_back_start(out);
 
 	while(current_pos < len)
 	{
-		if(line[current_pos] != ' ' && line[current_pos] != '\t' && line[current_pos] != '\n' && current_pos != len-1 )
+		if(!isspace(line[current_pos]) && current_pos != len-1)
 		{
 			token += line[current_pos];
 			++current_pos;			
@@ -25,11 +26,11 @@ void Parser::ParseLine( callBackStart cbst, callBackNum cbnm, callBackStr cbstr,
 		{
 			if(isdigit(line[current_pos]))
 			{
-				cbnm(token, out);
+				call_back_num(token, out);
 			}
 			else
 			{
-				cbstr(token, out);
+				call_back_str(token, out);
 			}
 
 			token = "";
@@ -38,6 +39,6 @@ void Parser::ParseLine( callBackStart cbst, callBackNum cbnm, callBackStr cbstr,
 
 	}
 
-	cbfsh(out);
+	call_back_finish(out);
 }
 

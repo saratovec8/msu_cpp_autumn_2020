@@ -4,10 +4,10 @@
 #include <cmath>
 #include <functional>
 
-using callBackStart = std::function<void(std::ofstream&)>;
+using callBackStart = std::function<void(std::ofstream &)>;
 using callBackNum = std::function<void(std::string &, std:: ofstream &)>;
 using callBackStr = std::function<void(std::string &, std:: ofstream &)>; 
-using callBackFinish = std::function<void(std::ofstream&)>;
+using callBackFinish = std::function<void(std::ofstream &)>;
 
 class Parser
 {
@@ -25,6 +25,7 @@ class Parser
 			line = line_;
 		}
 
-		void ParseLine(callBackStart cbst, callBackNum cbnm, callBackStr cbstr,callBackFinish cbfsh, std::ofstream &out);
+		void ParseLine(callBackStart call_back_start, callBackNum call_back_num, callBackStr call_back_str,
+				callBackFinish call_back_finish, std::ofstream &out);
 
 };

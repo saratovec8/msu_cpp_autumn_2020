@@ -7,22 +7,22 @@
 #include <functional>
 
 
-void ParseNum(std::string &token, std:: ofstream& out)
+void ParseNum(std::string &token, std::ofstream &out)
 {
 	out << token << "\n";
 }
 
-void  ParseStr(std::string &token, std::ofstream& out)
+void  ParseStr(std::string &token, std::ofstream &out)
 {
 	out << token << "\n";
 }
 
-void Start_fun(std::ofstream& out)
+void Start_fun(std::ofstream &out)
 {
 	out << "Start parcing line\n" ;
 }
 
-void Finish_fun(std::ofstream& out)
+void Finish_fun(std::ofstream &out)
 {
 	out << "Finish parcing line\n";
 }
@@ -37,9 +37,9 @@ void DefaultWorkTest()
 	callBackStr str_parcer = &ParseStr;
 
 	Parser p;
-	std:: string line;
-	std:: ifstream in("textin.txt");
-	std:: ofstream fout;
+	std::string line;
+	std::ifstream in("textin.txt");
+	std::ofstream fout;
 	fout.open("textout.txt");
 
 	if(in.is_open())
@@ -84,7 +84,6 @@ void DefaultWorkTest()
 		assert(!getline(checkin,line));  
 	}
 	checkin.close();
-
 }
 
 
@@ -93,7 +92,7 @@ int main()
 {
 	DefaultWorkTest();
 
-	std::cout << "success" <<std::endl;
+	std::cout << "success" << std::endl;
 
 	return 0;
 }
