@@ -22,7 +22,7 @@ class Matrix
 
 		bool operator == (Matrix &B) const;
 
-		Matrix& operator = (Matrix &B);
+		Matrix &operator = (Matrix &B);
 
 		class Row;
 
@@ -44,9 +44,9 @@ class Matrix
 
 				Row(Row &r);
 
-				int32_t& operator[] (const int32_t j);
+				int32_t &operator[] (const int32_t j);
 
-				const int32_t& operator[] (const int32_t j) const;
+				const int32_t &operator[] (const int32_t j) const;
 
 				~Row()
 				{

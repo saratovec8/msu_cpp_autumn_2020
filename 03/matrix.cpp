@@ -32,7 +32,8 @@ Matrix::Matrix(Matrix &A)
 	{
 		delete [] arr[i];
 	}
-	n_rows = A.GetRowNum();                                                                                                                                                 n_columns = A.GetColumnNum(); 
+	n_rows = A.GetRowNum();      
+	n_columns = A.GetColumnNum(); 
 	arr = new int32_t* [n_rows];
 	for(int i = 0; i < n_rows; i++)
 	{
@@ -57,7 +58,7 @@ int32_t Matrix::GetColumnNum() const
 	return n_columns;
 }
 
-Matrix & Matrix::operator *= (int32_t num)
+Matrix &Matrix::operator *= (int32_t num)
 {
 	for(int i = 0; i < n_rows; i++)
 		for (int j = 0; j < n_columns; j++)
