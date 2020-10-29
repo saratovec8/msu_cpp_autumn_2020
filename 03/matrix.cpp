@@ -26,6 +26,26 @@ Matrix::Matrix(const int32_t n_rows_, const int32_t n_columns_, int32_t **arr_)
 
 }
 
+Matrix::Matrix(Matrix &A)
+{
+	for(int i = 0; i < n_rows; i++)
+	{
+		delete [] arr[i];
+	}
+	n_rows = A.GetRowNum();                                                                                                                                                 n_columns = A.GetColumnNum(); 
+	arr = new int32_t* [n_rows];
+	for(int i = 0; i < n_rows; i++)
+	{
+		arr[i] = new int32_t [n_columns];
+	}
+	for(int i = 0; i < n_rows; i++)
+		for(int j = 0; j< n_columns; j++)
+		{
+			arr[i][j] = A[i][j];
+		}
+}
+
+
 
 int32_t Matrix::GetRowNum() const
 {
@@ -37,13 +57,14 @@ int32_t Matrix::GetColumnNum() const
 	return n_columns;
 }
 
-Matrix Matrix::operator *= (int32_t num)
+Matrix & Matrix::operator *= (int32_t num)
 {
 	for(int i = 0; i < n_rows; i++)
 		for (int j = 0; j < n_columns; j++)
 		{
 			arr[i][j] *= num;
 		}
+	return *this;
 }
 
 bool Matrix::operator == (Matrix &B) const
@@ -69,28 +90,46 @@ bool Matrix::operator == (Matrix &B) const
 
 Matrix &Matrix::operator = (Matrix &B)
 {
-	for(int i = 0; i < n_rows; i++)
+	if (&B == this)
 	{
-		delete [] arr[i];
+		return *this;
 	}
-	n_columns = B.GetColumnNum();
-	n_rows = B.GetRowNum();
-
-	arr = new int32_t* [n_rows];
-	for(int i = 0; i < n_rows; i++)
+	else
 	{
-		arr[i] = new int32_t [n_columns];
-	}
-
-	for(int i = 0; i < n_rows; i++)
-		for(int j = 0; j < n_columns; j++)
+		for(int i = 0; i < n_rows; i++)
 		{
-			arr[i][j] = B[i][j];
+			delete [] arr[i];
 		}
-	return *this;
+		n_columns = B.GetColumnNum();
+		n_rows = B.GetRowNum();
+
+		arr = new int32_t* [n_rows];
+		for(int i = 0; i < n_rows; i++)
+		{
+			arr[i] = new int32_t [n_columns];
+		}
+
+		for(int i = 0; i < n_rows; i++)
+			for(int j = 0; j < n_columns; j++)
+			{
+				arr[i][j] = B[i][j];
+			}
+		return *this;
+	}
 }
 
-Matrix::Row  Matrix::operator [] (int32_t i) 
+Matrix::Row Matrix::operator [] (const int32_t i) 
+{
+	if(i >= n_rows)
+	{
+		throw std::out_of_range("");
+	}
+
+	Row row(i, n_columns, arr);
+	return row;
+}
+
+const Matrix::Row  Matrix::operator [] (const int32_t i) const
 {
 	if(i >= n_rows)
 	{
@@ -126,7 +165,21 @@ Matrix::Row::Row(const int32_t i, const int32_t n_columns_, int32_t **arr_)
 	}
 }
 
-int32_t &Matrix::Row::operator [] (int32_t j)
+Matrix::Row::Row(Matrix::Row &r)
+{
+	if(a)
+	{
+		delete[] a;
+	}
+	length = r.length;
+	a = new int32_t [length];
+	for(int i = 0; i < length; i++)
+	{
+		a[i] = r.a[i];
+	}
+}
+
+int32_t &Matrix::Row::operator [] (const int32_t j)
 {
 	if(j >= length)
 	{
@@ -135,8 +188,13 @@ int32_t &Matrix::Row::operator [] (int32_t j)
 	return a[j];
 }
 
-Matrix::Row::~Row()
+const int32_t &Matrix::Row::operator [] (const int32_t j) const
 {
-	delete [] a;
+	if(j >= length)
+	{
+		throw std::out_of_range("");
+	}
+	return a[j];
 }
+
 

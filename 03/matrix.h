@@ -12,11 +12,13 @@ class Matrix
 
 		Matrix(const int32_t n_rows_, const int32_t n_columns_, int32_t **arr_);
 
+		Matrix(Matrix &A);
+
 		int32_t GetRowNum() const;
 
 		int32_t GetColumnNum() const;
 
-		Matrix operator *= (int32_t num);
+		Matrix &operator *= (int32_t num);
 
 		bool operator == (Matrix &B) const;
 
@@ -24,7 +26,9 @@ class Matrix
 
 		class Row;
 
-		Row  operator [](int32_t i);
+		Row operator [](const int32_t i);
+
+		const Row operator [](const int32_t i) const; 
 
 		~Matrix();
 
@@ -38,10 +42,15 @@ class Matrix
 
 				Row(const int32_t i, const int32_t n_columns_, int32_t **arr_);
 
-				int32_t& operator[] (int32_t j);
+				Row(Row &r);
 
-				~Row();
+				int32_t& operator[] (const int32_t j);
 
+				const int32_t& operator[] (const int32_t j) const;
+
+				~Row()
+				{
+				}
 		};
 
 
