@@ -12,7 +12,7 @@ class Matrix
 
 		Matrix(const int32_t n_rows_, const int32_t n_columns_, int32_t **arr_);
 
-		Matrix(Matrix &A);
+		Matrix(const Matrix &A);
 
 		int32_t GetRowNum() const;
 
@@ -42,7 +42,7 @@ class Matrix
 
 				Row(const int32_t i, const int32_t n_columns_, int32_t **arr_);
 
-				Row(Row &r);
+				Row(const Row &r);
 
 				int32_t &operator[] (const int32_t j);
 

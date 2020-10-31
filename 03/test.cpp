@@ -51,10 +51,11 @@ void CreationTest()
 
 	assert(A.GetRowNum() == 5 && A.GetColumnNum() == 7); 
 
-	for(int i = 0; i<n_rows_; i++)
+	for(int i = 0; i < n_rows_; i++)
 	{
 		delete [] arr_[i];
 	}
+	delete [] arr_;
 }
 
 void EqualityTest()
@@ -82,6 +83,7 @@ void EqualityTest()
 	{
 		delete [] arr_[i];
 	}
+	delete [] arr_;
 
 	int32_t **a_ = new int32_t* [n_rows_ - 1];
 	for(int i = 0; i < n_rows_ - 1; i++)
@@ -98,6 +100,7 @@ void EqualityTest()
 	{
 		delete [] a_[i];
 	}
+	delete [] a_;
 
 }
 
@@ -116,6 +119,7 @@ void AssignmentTest()
 	{
 		delete [] arr_[i];
 	}
+	delete [] arr_;
 
 	n_rows_ = 1; 
 	n_columns_ = 10;
@@ -158,4 +162,5 @@ void MultiplicationTest()
 	{
 		delete [] arr_[i];
 	}
+	delete [] arr_;
 }

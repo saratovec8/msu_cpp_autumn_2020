@@ -26,14 +26,11 @@ Matrix::Matrix(const int32_t n_rows_, const int32_t n_columns_, int32_t **arr_)
 
 }
 
-Matrix::Matrix(Matrix &A)
+Matrix::Matrix(const Matrix &A)
 {
-	for(int i = 0; i < n_rows; i++)
-	{
-		delete [] arr[i];
-	}
-	n_rows = A.GetRowNum();      
+	n_rows = A.GetRowNum(); 
 	n_columns = A.GetColumnNum(); 
+
 	arr = new int32_t* [n_rows];
 	for(int i = 0; i < n_rows; i++)
 	{
@@ -101,6 +98,8 @@ Matrix &Matrix::operator = (Matrix &B)
 		{
 			delete [] arr[i];
 		}
+		delete [] arr;
+
 		n_columns = B.GetColumnNum();
 		n_rows = B.GetRowNum();
 
@@ -147,6 +146,7 @@ Matrix::~Matrix()
 	{
 		delete [] arr[i];
 	}
+	delete [] arr;
 }
 
 
@@ -159,25 +159,13 @@ Matrix::Row::Row()
 Matrix::Row::Row(const int32_t i, const int32_t n_columns_, int32_t **arr_)
 {
 	length = n_columns_;
-	a = new int32_t [length];
-	for(int j = 0; j < length; j++)
-	{
-		a[j] = arr_[i][j];
-	}
+	a = arr_[i];
 }
 
-Matrix::Row::Row(Matrix::Row &r)
+Matrix::Row::Row(const Matrix::Row &r)
 {
-	if(a)
-	{
-		delete[] a;
-	}
 	length = r.length;
-	a = new int32_t [length];
-	for(int i = 0; i < length; i++)
-	{
-		a[i] = r.a[i];
-	}
+	a = r.a;
 }
 
 int32_t &Matrix::Row::operator [] (const int32_t j)
