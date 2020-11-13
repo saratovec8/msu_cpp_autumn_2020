@@ -21,26 +21,26 @@ class Serializer
 	}
 
 	template <class T>
-	Error save(const T &object)
+	Error save(T &object)
 	{
 		return object.serialize(*this);
 	}
 
 	template <class... ArgsT>
-	Error operator()(const ArgsT &...args)
+	Error operator()(ArgsT &...args)
 	{
 		return process(args...);
 	}
 
 	private:
 	template <typename T>
-	Error process(const T &object)
+	Error process(T &object)
 	{
 		return save(object);
 	}
 
 	template <typename T, typename... ArgsT>
-	Error process(const T &object, const ArgsT &...args)
+	Error process(T &object, ArgsT &...args)
 	{
 		if(save(object) == Error::NoError)
 		{
@@ -55,10 +55,10 @@ class Serializer
 };
 
 template <>
-Error Serializer::save<uint64_t>(const uint64_t &object);
+Error Serializer::save<uint64_t>(uint64_t &object);
 
 template <>
-Error Serializer::save<bool>(const bool &object);
+Error Serializer::save<bool>(bool &object);
 
 class Deserializer
 {

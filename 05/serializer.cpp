@@ -1,8 +1,23 @@
 #include <iostream>
 #include "serializer.h"
 
+bool Long_is_positive_digit(std::string &str)
+{
+	bool res = true;
+	int i = 0;
+	while(res == true && i < str.size())
+	{
+		if(!std::isdigit(str[i]))
+		{
+			res = false;
+		}
+		i++;
+	}
+	return res;
+}
+
 template <>
-Error Serializer::save(const uint64_t &object)
+Error Serializer::save(uint64_t &object)
 {
 	out_ << object << Separator;
 
@@ -17,7 +32,7 @@ Error Serializer::save(const uint64_t &object)
 }
 
 template <>
-Error Serializer::save<bool>(const bool &object)
+Error Serializer::save<bool>(bool &object)
 {
 	if (!object)
 	{
@@ -41,7 +56,16 @@ Error Serializer::save<bool>(const bool &object)
 template <>
 Error Deserializer::load(uint64_t &object)
 {
-	in_ >> object;
+	std::string str;
+	in_ >> str;
+	if(!Long_is_positive_digit(str))
+	{
+		return Error::CorruptedArchive;
+	}
+	else
+	{
+		object = std::stoll(str);
+	}
 
 	if (in_.fail())
 	{

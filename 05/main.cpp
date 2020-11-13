@@ -10,7 +10,7 @@ struct Data
 	uint64_t c;
 
 	template <class Serializer>
-	Error serialize(Serializer &A) const
+	Error serialize(Serializer &A)
 	{
 		return A(a, b, c);
 	}
@@ -31,7 +31,7 @@ void RightTest()
 	Serializer serializer(str);
 	serializer.save(x);
 
-	Data y { 0, false, 0 };
+	Data y { 1, false, 0 };
 
 	Deserializer deserializer(str);
 	const Error err = deserializer.load(y);
@@ -43,9 +43,22 @@ void RightTest()
 	assert(x.c == y.c);
 }
 
+void WrongTest()
+{
+	Data y { 1, false, 0 };
+
+	std::stringstream str("-1 true 1");
+
+	Deserializer deserializer(str);
+        const Error err = deserializer.load(y);
+
+	assert(err == Error::CorruptedArchive);
+}
+
 int main()
 {
 	RightTest();
+	WrongTest();
 
 	std::cout << "success" << std::endl;
 
