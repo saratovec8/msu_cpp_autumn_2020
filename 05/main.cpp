@@ -43,13 +43,37 @@ void RightTest()
 	assert(x.c == y.c);
 }
 
-void WrongTest()
+void WrongTest1()
 {
 	Data y { 1, false, 0 };
 
-	std::stringstream str("-1 true 1");
+	std::stringstream str("100000000000000000000000000000000000000000000000000000000000000000000000 true 1");
 
 	Deserializer deserializer(str);
+	const Error err = deserializer.load(y);
+
+	assert(err == Error::CorruptedArchive);
+}
+
+void WrongTest2()
+{
+	Data y { 1, false, 0 };
+
+	std::stringstream str("-1 true 1"); 
+
+	Deserializer deserializer(str);
+	const Error err = deserializer.load(y);
+
+	assert(err == Error::CorruptedArchive);
+}
+
+void WrongTest3()
+{
+        Data y { 1, false, 0 };
+
+	std::stringstream str("1err true 1");
+
+        Deserializer deserializer(str);
         const Error err = deserializer.load(y);
 
 	assert(err == Error::CorruptedArchive);
@@ -58,7 +82,9 @@ void WrongTest()
 int main()
 {
 	RightTest();
-	WrongTest();
+	WrongTest1();
+	WrongTest2();
+	WrongTest3();
 
 	std::cout << "success" << std::endl;
 
