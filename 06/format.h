@@ -21,9 +21,9 @@ std::string format(const std::string &s)
 }
 
 	template<class... Args>
-std::string format(const std::string &s, Args &&...args)
+std::string format(const std::string &s, const Args &...args)
 {
-	std::vector<std::string> strs {to_string(std::forward<Args>(args))...};
+	std::vector<std::string> strs = {to_string(args)...};
 
 	static const char FORMAT_SYMBOL = '{';
 	std::string res;
@@ -48,7 +48,7 @@ std::string format(const std::string &s, Args &&...args)
 				{	
 					size_t num = 0;
 					if (!buf.empty())
-						num = atoi(buf.c_str());
+						num = std::stoi(buf);
 					else
 						throw CorruptedIndex("Empty index");
 
