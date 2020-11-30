@@ -23,7 +23,7 @@ void FirstTest()
 	{
 		std::string s = format("{0} + {0} = {2}", "one", 2);   
 	}
-	catch(std::exception& err)
+	catch(const std::exception& err)
 	{                        	
 		IsError = true;
 		std::cerr << "First test error: " << err.what() << std::endl;
@@ -43,7 +43,7 @@ void SecondTest()
 	{
 		std::string s = format("{0} + {0} = {}", "one", 2);
 	}
-	catch(std::exception& err)
+	catch(const std::exception& err)
 	{
 		IsError = true;   
 		std::cerr << "Second test error: " << err.what() << std::endl;
@@ -62,7 +62,7 @@ void ThirdTest()
 	{
 		std::string s = format("{0} { + {0} = {1}", "one", 2);
 	}
-	catch(std::exception& err)
+	catch(const std::exception& err)
 	{
 		IsError = true;
 		std::cerr << "Third test error: " << err.what() << std::endl;

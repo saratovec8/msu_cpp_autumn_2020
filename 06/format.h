@@ -48,7 +48,16 @@ std::string format(const std::string &s, const Args &...args)
 				{	
 					size_t num = 0;
 					if (!buf.empty())
-						num = std::stoi(buf);
+					{
+						try
+						{
+							num = std::stoi(buf);
+						}
+						catch(std::out_of_range)
+						{
+							std::cout << "index out of range" << std::endl;
+						}
+					}
 					else
 						throw CorruptedIndex("Empty index");
 
