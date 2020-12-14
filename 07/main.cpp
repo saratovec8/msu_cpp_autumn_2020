@@ -4,29 +4,36 @@
 
 void Test()
 {
-	Vector<std::string> vec(5);
-	vec[0] = "a";
-	vec[1] = "b";
-	vec[2] = "c"; 
-	vec[3] = "d"; 
-	vec[4] = "e";
+	Vector<int> vec;
 
-        Vector<std::string> vec2 = vec;
-	assert(vec.size() == 5);	
-	assert(vec == vec2);
+	assert(vec.capacity() == 4);
 
-	vec.push_back("f");
-	vec2.resize(6);
-	vec2[5] = "f";
-	assert(vec == vec2);
+	for(int i = 5; i < 15; i++)
+	{
+		vec.push_back(i);
+	}
+
+	assert(vec.size() == 10);
 
 	vec.pop_back();
-	assert(vec.size() == 5);
+
+	assert(vec.size() == 9);
+
+	Vector<int> vec2(vec);
+
+	assert(vec2 == vec);
+
+	vec.emplace_back(7);
+
+	assert(vec[9] == 7);
+
+	vec.resize(50);
+
+	assert(vec.size() == 50);
 
 	vec.clear();
-	assert(vec.empty() == true);
 
-	assert(vec2.capacity() == 9);
+	assert(vec.size() == 0);
 }
 
 int main()

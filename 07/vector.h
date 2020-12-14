@@ -162,14 +162,6 @@ class Vector
 		size_type _maxsize_;
 		Alloc _alloc_;
 	public:
-		Vector(size_type size) : _size_(size), _maxsize_(size + 4)
-	{
-		_data_ = _alloc_.allocate(_maxsize_);
-
-		for(size_type i = 0; i < size; ++i)
-			_alloc_.construct(_data_ + i, _data_[i]);
-
-	}
 
 		Vector() : _size_(0), _maxsize_(4)
 	{
@@ -249,15 +241,16 @@ class Vector
 			throw std::out_of_range("Wrong index");
 		}
 
-		void emplace_back(value_type&& elem)
-		{
-			_data_[_size_ - 1] = std::forward<T>(elem);
-		}
+		template <class... Args>
+			const_reference emplace_back(Args&&... args) 
+			{
+				if (_size_ == _maxsize_) 
+					reserve(_maxsize_ ? _maxsize_ * 2 : 1);
 
-		void emplace_back(const_reference elem)
-		{
-			_data_[_size_ - 1] = elem;
-		}
+				_alloc_.destroy(_data_ + _size_);
+				_alloc_.construct(_data_ + _size_++, T(std::forward<Args>(args)...));
+				return *(_data_ + _size_ - 1);
+			}
 
 		bool empty() const
 		{
@@ -268,25 +261,25 @@ class Vector
 		{
 			if(_size_ < _maxsize_)
 			{
-				_alloc_.construct(_data_ + _size_++, std::forward<value_type>(std::move(elem)));
+				_alloc_.construct(_data_ + _size_++, std::forward<value_type>(elem));
 				return;
 			}
 
 			pointer bufer = _alloc_.allocate(_maxsize_ * 2);
 			for(size_type i = 0; i < _size_; ++i)
 			{
-				_alloc_.construct(bufer + i, _data_[i]);
+				_alloc_.construct(bufer + i, std::move(_data_[i]));
 				_alloc_.destroy(_data_ + i);
 			}
 
-			_alloc_.construct(_data_ + _size_++, std::forward<value_type>(std::move(elem)));
+			_alloc_.construct(_data_ + _size_++, std::forward<value_type>(elem));
 			_alloc_.deallocate(_data_, _maxsize_);
 			_maxsize_ *= 2;
-			_data_ = std::move(bufer);
+			_data_ = bufer;
 		}
 
 		void push_back(const_reference elem)
-		{
+		{	
 			if(_size_ < _maxsize_)
 			{
 				_alloc_.construct(_data_ + _size_++, elem);
@@ -296,14 +289,14 @@ class Vector
 			pointer bufer = _alloc_.allocate(_maxsize_ * 2);
 			for(size_type i = 0; i < _size_; ++i)
 			{
-				_alloc_.construct(bufer + i, _data_[i]);
+				_alloc_.construct(bufer + i, std::move(_data_[i]));
 				_alloc_.destroy(_data_ + i);
 			}
 
 			_alloc_.construct(_data_ + _size_++, elem);
 			_alloc_.deallocate(_data_, _maxsize_);
 			_maxsize_ *= 2;
-			_data_ = std::move(bufer);
+			_data_ = bufer;
 		}
 
 
@@ -343,12 +336,12 @@ class Vector
 
 				for (size_type i = 0; i < _size_; ++i)
 				{
-					_alloc_.construct(bufer + i, _data_[i]);
+					_alloc_.construct(bufer + i, std::move(_data_[i]));
 					_alloc_.destroy(_data_ + i);
 				}
 				_alloc_.deallocate(_data_, _maxsize_);
 
-				_data_ = std::move(bufer);
+				_data_ = bufer;
 				_maxsize_ = count;
 			}
 		}
