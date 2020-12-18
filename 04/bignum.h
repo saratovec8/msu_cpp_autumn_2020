@@ -1,9 +1,12 @@
+#pragma once
+
 #include <algorithm>
 #include <cmath>
 #include <iostream>
 #include <string>
 #include "vector.h"
 #include <iomanip>
+#include <sstream>
 
 const uint16_t POWER = 4;
 const size_t BASE = pow(10, POWER);
@@ -44,6 +47,22 @@ class BigNum
 		BigNum(const BigNum &num) = default;
 		~BigNum() = default;
 		BigNum &operator=(const BigNum &num) = default;
+
+		BigNum(BigNum &&other) : _sign_(std::move(other._sign_))
+		{
+			_data_ = other._data_;
+		}
+
+		BigNum &operator=(BigNum &&moved) 
+		{
+			if (this == &moved)
+			{
+				return *this;
+			}
+			_sign_ = std::move(moved._sign_);
+			_data_ = moved._data_;
+			return *this;
+		}
 
 		BigNum(int num)
 		{
