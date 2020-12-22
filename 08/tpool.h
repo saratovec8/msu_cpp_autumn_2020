@@ -51,7 +51,7 @@ class ThreadPool
 						{
 							{
 								std::unique_lock<std::mutex> lock(_queue_m_);
-								_mes_to_thr_.wait(lock, [this] { eturn !_queue_t_.empty() || _stop_; });
+								_mes_to_thr_.wait(lock, [this] { return !_queue_t_.empty() || _stop_; });
 								if (_stop_ && _queue_t_.empty())
 									return;
 								task = std::move(_queue_t_.front());
