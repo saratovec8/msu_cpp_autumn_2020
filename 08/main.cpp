@@ -7,12 +7,12 @@
 #include <cmath>
 
 
-int64_t from_binary_to_decimal(const std::vector<int>& vec, size_t i, size_t j) 
+int64_t from_binary_to_decimal(const std::vector<int> &vec, size_t i, size_t j) 
 {
 	int res = 0;
 	for (size_t l = i; l < j; ++l) 
 	{
-		res += vec[l]*pow(2, l);;
+		res += vec[l]*pow(2, l);
 	}
 	return res;
 }

@@ -22,7 +22,7 @@ class ThreadPool
 	public:
 
 		template <class Func, class... Args>
-			auto exec(Func func, Args... args) -> std::future<decltype(func(args...))>
+			auto exec(Func func, Args... args)->std::future<decltype(func(args...))>
 			{
 				using type = decltype(func(args...));
 				auto task = std::make_shared<std::packaged_task<type()>>(std::packaged_task<type()>(std::move(std::bind(func, args...))));
@@ -30,7 +30,9 @@ class ThreadPool
 				{
 					std::unique_lock<std::mutex> lock(_queue_m_);
 					if (_stop_)
+					{
 						throw std::runtime_error("thread terminated");
+					}
 
 					_queue_t_.push([task]() { (*task)(); });
 				}
@@ -65,11 +67,13 @@ class ThreadPool
 			_stop_ = true;
 			_mes_to_thr_.notify_all();
 			for (std::thread &thread : _threads_)
+			{
 				thread.join();
+			}
 		}
 
 
-		ThreadPool() = default;
-		ThreadPool& operator=(ThreadPool&) = default;
+		ThreadPool() = delete;
+		ThreadPool& operator=(ThreadPool&) = delete;
 
 };
